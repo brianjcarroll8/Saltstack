@@ -32,7 +32,8 @@ def myfile():
     with salt.utils.files.fopen(_myfile, 'w+') as fp:
         fp.write(salt.utils.stringutils.to_str('Hello' + os.linesep))
     yield _myfile
-    os.unlink(_myfile)
+    if os.path.exists(_myfile):
+       os.unlink(_myfile)
 
 
 @skipIf(salt.utils.platform.is_windows(), reason='No chgrp on Windows')
@@ -45,3 +46,10 @@ def test_chown(running_username, myfile, modules):
     fstat = os.stat(myfile)
     assert fstat.st_uid == os.getuid()
     assert fstat.st_gid == grp.getgrnam(group).gr_gid
+
+
+def test_remove_file(modules, myfile):
+    ret = modules.file.remove(myfile)
+    assert ret is True
+
+

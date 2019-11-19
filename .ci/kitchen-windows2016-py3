@@ -1,7 +1,7 @@
 @Library('salt@master-1.4') _
 
 // Define the maximum time, in hours, that a test run should run for
-def testrun_timeout = 8
+def testrun_timeout = 6
 
 def distro_name = 'windows'
 def distro_version = '2016'
@@ -10,8 +10,9 @@ def nox_env_name = 'pytest-zeromq'
 def golden_images_branch = 'master'
 def nox_passthrough_opts = '--log-cli-level=warning --ignore=tests/utils'
 def concurrent_builds = 1
-def use_spot_instances = false
+def use_spot_instances = true
 def jenkins_slave_label = 'kitchen-slave'
+def splits = ['unit', 'multimaster', 'integration']
 
 properties([
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '30')),
@@ -32,6 +33,7 @@ runTests(
     concurrent_builds: concurrent_builds,
     run_full: params.runFull,
     use_spot_instances: use_spot_instances,
-    jenkins_slave_label: jenkins_slave_label)
+    jenkins_slave_label: jenkins_slave_label,
+    splits: splits)
 
 // vim: ft=groovy
