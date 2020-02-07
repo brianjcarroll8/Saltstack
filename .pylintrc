@@ -676,7 +676,8 @@ allowed-3rd-party-modules=msgpack,
                           zmq,
                           pytest,
                           pytestsalt,
-                          setuptools
+                          setuptools,
+                          distro
 
 
 [EXCEPTIONS]
