@@ -13,6 +13,11 @@ import traceback
 import collections
 import copy as pycopy
 
+try:
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import MutableMapping
+
 # Import Salt libs
 import salt.exceptions
 import salt.minion
@@ -55,7 +60,7 @@ CLIENT_INTERNAL_KEYWORDS = frozenset([
 ])
 
 
-class ClientFuncsDict(collections.MutableMapping):
+class ClientFuncsDict(MutableMapping):
     '''
     Class to make a read-only dict for accessing runner funcs "directly"
     '''
