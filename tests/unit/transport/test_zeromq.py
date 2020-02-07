@@ -12,11 +12,7 @@ import multiprocessing
 import ctypes
 from concurrent.futures.thread import ThreadPoolExecutor
 
-# linux_distribution deprecated in py3.7
-try:
-    from platform import linux_distribution
-except ImportError:
-    from distro import linux_distribution
+from distro import linux_distribution
 
 # Import 3rd-party libs
 import zmq.eventloop.ioloop
