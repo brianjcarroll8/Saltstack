@@ -48,3 +48,5 @@ add_proxymodule_to_opts: False
 
 proxy:
   proxytype: dummy
+
+max_open_files: 4096

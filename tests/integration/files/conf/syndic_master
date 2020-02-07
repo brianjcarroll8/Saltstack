@@ -29,3 +29,5 @@ enable_ssh_minions: True
 ignore_host_keys: True
 
 zmq_filtering: True
+
+max_open_files: 4096

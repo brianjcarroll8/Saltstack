@@ -8,3 +8,5 @@ tcp_master_pub_port: 64512
 tcp_master_pull_port: 64513
 tcp_master_publish_pull: 64514
 tcp_master_workers: 64515
+
+max_open_files: 4096

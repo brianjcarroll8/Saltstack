@@ -67,3 +67,5 @@ mine_functions:
   test.arg:
     - isn't
     - allow_tgt: 'sub_minion'
+
+max_open_files: 4096
