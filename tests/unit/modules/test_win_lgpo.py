@@ -434,7 +434,7 @@ class WinLGPOGetPolicyFromPolicyInfoTestCase(TestCase, LoaderModuleMockMixin):
 
     def test_get_policy_name(self):
         result = win_lgpo.get_policy(
-            policy_name="Network firewall: Public: Settings: Display a " "notification",
+            policy_name="Network firewall: Public: Settings: Display a notification",
             policy_class="machine",
             return_value_only=True,
             return_full_policy_names=True,
@@ -456,7 +456,7 @@ class WinLGPOGetPolicyFromPolicyInfoTestCase(TestCase, LoaderModuleMockMixin):
 
     def test_get_policy_name_full_return(self):
         result = win_lgpo.get_policy(
-            policy_name="Network firewall: Public: Settings: Display a " "notification",
+            policy_name="Network firewall: Public: Settings: Display a notification",
             policy_class="machine",
             return_value_only=False,
             return_full_policy_names=True,
@@ -482,7 +482,7 @@ class WinLGPOGetPolicyFromPolicyInfoTestCase(TestCase, LoaderModuleMockMixin):
 
     def test_get_policy_name_full_return_ids(self):
         result = win_lgpo.get_policy(
-            policy_name="Network firewall: Public: Settings: Display a " "notification",
+            policy_name="Network firewall: Public: Settings: Display a notification",
             policy_class="machine",
             return_value_only=False,
             return_full_policy_names=False,
@@ -959,7 +959,7 @@ class WinLGPOGetPolicyFromPolicyResources(TestCase, LoaderModuleMockMixin):
 
     def setUp(self):
         if self.adml_data is None:
-            self.adml_data = win_lgpo._get_policy_resources("en-US")
+            self.adml_data = win_lgpo._get_policy_resources(language="en-US")
 
     def test__getAdmlPresentationRefId(self):
         ref_id = "LetAppsAccessAccountInfo_Enum"
@@ -970,7 +970,7 @@ class WinLGPOGetPolicyFromPolicyResources(TestCase, LoaderModuleMockMixin):
     def test__getAdmlPresentationRefId_result_text_is_none(self):
         ref_id = "LetAppsAccessAccountInfo_UserInControlOfTheseApps_List"
         expected = (
-            "Put user in control of these specific apps (use Package " "Family Names)"
+            "Put user in control of these specific apps (use Package Family Names)"
         )
         result = win_lgpo._getAdmlPresentationRefId(self.adml_data, ref_id)
         self.assertEqual(result, expected)
