@@ -12,7 +12,7 @@ import time
 import pytest
 import salt.utils.path
 from tests.support.case import ModuleCase
-from tests.support.paths import FILES
+from tests.support.runtests import RUNTIME_VARS
 from tests.support.unit import skipIf
 
 log = logging.getLogger(__name__)
@@ -56,7 +56,7 @@ class VaultTestCase(ModuleCase):
             ret = self.run_function(
                 "cmd.retcode",
                 cmd="/usr/local/bin/vault policy write testpolicy {0}/vault.hcl".format(
-                    FILES
+                    RUNTIME_VARS.FILES
                 ),
                 env={"VAULT_ADDR": "http://127.0.0.1:8200"},
             )
@@ -173,7 +173,7 @@ class VaultTestCaseCurrent(ModuleCase):
             ret = self.run_function(
                 "cmd.retcode",
                 cmd="/usr/local/bin/vault policy write testpolicy {0}/vault.hcl".format(
-                    FILES
+                    RUNTIME_VARS.FILES
                 ),
                 env={"VAULT_ADDR": "http://127.0.0.1:8200"},
             )
