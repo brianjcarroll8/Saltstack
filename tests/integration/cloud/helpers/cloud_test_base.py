@@ -15,7 +15,7 @@ from salt.config import cloud_config, cloud_providers_config
 from salt.ext.six.moves import range
 from salt.utils.yaml import safe_load
 from tests.support.case import ShellCase
-from tests.support.helpers import generate_random_name
+from tests.support.helpers import random_string
 from tests.support.runtests import RUNTIME_VARS
 
 TIMEOUT = 500
@@ -158,9 +158,9 @@ class CloudTest(ShellCase):
             # Create the cloud instance name to be used throughout the tests
             subclass = self.__class__.__name__.strip("Test")
             # Use the first three letters of the subclass, fill with '-' if too short
-            self._instance_name = generate_random_name(
-                "cloud-test-{:-<3}-".format(subclass[:3])
-            ).lower()
+            self._instance_name = random_string(
+                "cloud-test-{:-<3}-".format(subclass[:3]), uppercase=False
+            )
         return self._instance_name
 
     @property

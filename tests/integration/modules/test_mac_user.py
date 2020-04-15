@@ -6,31 +6,19 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import os
-import random
-import string
 
 import pytest
 import salt.ext.six as six
 import salt.utils.files
 from salt.exceptions import CommandExecutionError
-from salt.ext.six.moves import range
 from tests.support.case import ModuleCase
-
-
-def __random_string(size=6):
-    """
-    Generates a random username
-    """
-    return "RS-" + "".join(
-        random.choice(string.ascii_uppercase + string.digits) for x in range(size)
-    )
-
+from tests.support.helpers import random_string
 
 # Create user strings for tests
-ADD_USER = __random_string()
-DEL_USER = __random_string()
-PRIMARY_GROUP_USER = __random_string()
-CHANGE_USER = __random_string()
+ADD_USER = random_string("RS-", lowercase=False)
+DEL_USER = random_string("RS-", lowercase=False)
+PRIMARY_GROUP_USER = random_string("RS-", lowercase=False)
+CHANGE_USER = random_string("RS-", lowercase=False)
 
 
 @pytest.mark.destructive_test

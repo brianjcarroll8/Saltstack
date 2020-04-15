@@ -10,11 +10,11 @@ import os
 import pytest
 from salt.config import cloud_providers_config
 from tests.support.case import ShellCase
-from tests.support.helpers import generate_random_name
+from tests.support.helpers import random_string
 from tests.support.runtests import RUNTIME_VARS
 
 # Create the cloud instance name to be used throughout the tests
-INSTANCE_NAME = generate_random_name("CLOUD-TEST-")
+INSTANCE_NAME = random_string("CLOUD-TEST-", lowercase=False)
 PROVIDER_NAME = "tencentcloud"
 
 

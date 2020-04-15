@@ -6,28 +6,16 @@ integration tests for mac_shadow
 from __future__ import absolute_import, print_function, unicode_literals
 
 import datetime
-import random
-import string
 
 import pytest
 import salt.utils.path
 import salt.utils.platform
-from salt.ext.six.moves import range
 from tests.support.case import ModuleCase
+from tests.support.helpers import random_string
 from tests.support.unit import skipIf
 
-
-def __random_string(size=6):
-    """
-    Generates a random username
-    """
-    return "RS-" + "".join(
-        random.choice(string.ascii_uppercase + string.digits) for x in range(size)
-    )
-
-
-TEST_USER = __random_string()
-NO_USER = __random_string()
+TEST_USER = random_string("RS-", lowercase=False)
+NO_USER = random_string("RS-", lowercase=False)
 
 
 @skipIf(not salt.utils.platform.is_darwin(), "Test only available on macOS")

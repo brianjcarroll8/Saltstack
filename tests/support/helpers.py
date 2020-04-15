@@ -36,6 +36,7 @@ import salt.ext.tornado.web
 import salt.utils.files
 import salt.utils.platform
 import salt.utils.stringutils
+import salt.utils.versions
 from salt.ext import six
 from salt.ext.six.moves import builtins, range
 from saltfactories.utils.ports import get_unused_localhost_port
@@ -1078,9 +1079,42 @@ def generate_random_name(prefix, size=6):
     size
         The number of characters to generate. Default: 6.
     """
-    return prefix + "".join(
-        random.choice(string.ascii_uppercase + string.digits) for x in range(size)
+    salt.utils.versions.warn_until_date(
+        "20220101",
+        "Please replace your call 'generate_random_name({0})' with 'random_string({0}, lowercase=False)' as "
+        "'generate_random_name' will be removed after {{date}}".format(prefix),
     )
+    return random_string(prefix, size=size, lowercase=False)
+
+
+def random_string(prefix, size=6, uppercase=True, lowercase=True, digits=True):
+    """
+    Generates a random string.
+
+    ..versionadded: 3001
+
+    Args:
+        prefix(str): The prefix for the random string
+        size(int): The size of the random string
+        uppercase(bool): If true, include uppercased ascii chars in choice sample
+        lowercase(bool): If true, include lowercased ascii chars in choice sample
+        digits(bool): If true, include digits in choice sample
+    Returns:
+        str: The random string
+    """
+    if not any([uppercase, lowercase, digits]):
+        raise RuntimeError(
+            "At least one of 'uppercase', 'lowercase' or 'digits' needs to be true"
+        )
+    choices = []
+    if uppercase:
+        choices.extend(string.ascii_uppercase)
+    if lowercase:
+        choices.extend(string.ascii_lowercase)
+    if digits:
+        choices.extend(string.digits)
+
+    return prefix + "".join(random.choice(choices) for _ in range(size))
 
 
 class Webserver(object):

@@ -9,8 +9,9 @@ import pytest
 import salt.utils.platform
 import salt.utils.win_dacl as win_dacl
 import salt.utils.win_reg as win_reg
-from tests.support.helpers import generate_random_name, patch
+from tests.support.helpers import random_string
 from tests.support.mixins import LoaderModuleMockMixin
+from tests.support.mock import patch
 from tests.support.unit import TestCase, skipIf
 
 try:
@@ -21,7 +22,7 @@ try:
 except ImportError:
     HAS_WIN32 = False
 
-FAKE_KEY = "SOFTWARE\\{0}".format(generate_random_name("SaltTesting-"))
+FAKE_KEY = "SOFTWARE\\{0}".format(random_string("SaltTesting-", lowercase=False))
 
 
 @skipIf(not HAS_WIN32, "Requires pywin32")

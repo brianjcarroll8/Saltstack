@@ -6,15 +6,13 @@ integration tests for shadow linux
 from __future__ import absolute_import, print_function, unicode_literals
 
 import os
-import random
-import string
 
 import pytest
 import salt.modules.linux_shadow
 import salt.utils.files
 import salt.utils.platform
-from salt.ext.six.moves import range
 from tests.support.case import ModuleCase
+from tests.support.helpers import random_string
 from tests.support.unit import skipIf
 
 
@@ -31,16 +29,9 @@ class ShadowModuleTest(ModuleCase):
         Get current settings
         """
         super(ShadowModuleTest, self).setUp()
-        self._no_user = self.__random_string()
+        self._no_user = random_string("tu-", uppercase=False)
+        self._test_user = random_string("tu-", uppercase=False)
         self._password = salt.modules.linux_shadow.gen_password("Password1234")
-
-    def __random_string(self, size=6):
-        """
-        Generates a random username
-        """
-        return "tu-" + "".join(
-            random.choice(string.ascii_lowercase + string.digits) for x in range(size)
-        )
 
     def test_info(self):
         """

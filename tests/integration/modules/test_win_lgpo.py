@@ -12,7 +12,7 @@ import salt.utils.files
 import salt.utils.platform
 import salt.utils.win_reg as reg
 from tests.support.case import ModuleCase
-from tests.support.helpers import generate_random_name
+from tests.support.helpers import random_string
 from tests.support.runtests import RUNTIME_VARS
 from tests.support.unit import skipIf
 
@@ -100,7 +100,7 @@ class WinLgpoTest(ModuleCase):
         )
         self.assertTrue(ret)
         secedit_output_file = os.path.join(
-            RUNTIME_VARS.TMP, generate_random_name("secedit-output-")
+            RUNTIME_VARS.TMP, random_string("secedit-output-")
         )
         secedit_output = self.run_function(
             "cmd.run", (), cmd="secedit /export /cfg {0}".format(secedit_output_file)

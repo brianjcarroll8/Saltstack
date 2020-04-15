@@ -7,7 +7,7 @@ import salt.modules.reg as reg
 import salt.utils.stringutils
 import salt.utils.win_reg
 from salt.exceptions import CommandExecutionError
-from tests.support.helpers import generate_random_name
+from tests.support.helpers import random_string
 from tests.support.mixins import LoaderModuleMockMixin
 from tests.support.mock import MagicMock, patch
 from tests.support.unit import TestCase, skipIf
@@ -32,7 +32,7 @@ UNICODE_KEY = "Unicode Key \N{TRADE MARK SIGN}"
 UNICODE_VALUE = (
     "Unicode Value " "\N{COPYRIGHT SIGN},\N{TRADE MARK SIGN},\N{REGISTERED SIGN}"
 )
-FAKE_KEY = "\\".join(["SOFTWARE", generate_random_name("SaltTesting-")])
+FAKE_KEY = "SOFTWARE\\{}".format(random_string("SaltTesting-", lowercase=False))
 
 
 @skipIf(not HAS_WIN32, "Tests require win32 libraries")
