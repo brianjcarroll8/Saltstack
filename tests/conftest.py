@@ -21,6 +21,7 @@ import sys
 import tempfile
 import textwrap
 from contextlib import contextmanager
+from datetime import timedelta
 from functools import partial, wraps
 
 import _pytest.logging
@@ -155,6 +156,37 @@ def pytest_addoption(parser):
         action="store_true",
         default=False,
         help="Run proxy tests",
+    )
+    slow_tests_group = parser.getgroup(
+        "Slow Tests",
+        description=(
+            "Salt currently has some tests, even unit tests which are quite slow. As a stop-gap, and "
+            "until we fix those slow tests, we provide two pytest options which allow selecting tests "
+            "slower than X seconds and/or tests faster than X seconds. Attention! If you provide "
+            "--test-slower-than=1 and --tests-faster-than=1 you will skip all tests."
+        ),
+    )
+    slow_tests_group.addoption(
+        "--tests-slower-than",
+        dest="test_slower_than",
+        type=int,
+        default=1,
+        help=(
+            "Run tests which are either not marked as slow or are marked as being "
+            "slower than the value provided, in seconds(or a fraction of). When 0, "
+            "all tests will run. Default: 1 second"
+        ),
+    )
+    slow_tests_group.addoption(
+        "--tests-faster-than",
+        dest="test_faster_than",
+        type=int,
+        default=0,
+        help=(
+            "Run tests which are either not marked as slow or are marked as being "
+            "faster than the value provided, in seconds(or a fraction of). When 0, "
+            "all tests will run. Default: 0"
+        ),
     )
     output_options_group = parser.getgroup("Output Options")
     output_options_group.addoption(
@@ -434,6 +466,66 @@ def pytest_runtest_setup(item):
     ):
         item._skipped_by_mark = True
         pytest.skip(PRE_PYTEST_SKIP_REASON)
+
+    # Skip slow tests, if marked as such
+    tests_slower_than_value = item.config.getoption("--tests-slower-than")
+    tests_faster_than_value = item.config.getoption("--tests-faster-than")
+    if tests_slower_than_value > 0:
+        slow_test_marker = item.get_closest_marker("slow_test")
+        # It the test is not maked with slow_test, it's assumed that it's faster than the 1 second default
+        if slow_test_marker is not None:
+            if slow_test_marker.args:
+                raise RuntimeError(
+                    "The 'slow_test' marker does not support arguments, only keyword arguments, the "
+                    "same that 'datetime.datetime.timedelta' accepts."
+                )
+            slow_test_timedelta = timedelta(**slow_test_marker.kwargs)
+            tests_slower_than_timedelta = timedelta(seconds=tests_slower_than_value)
+            if slow_test_timedelta > tests_slower_than_timedelta:
+                item._skipped_by_mark = True
+                pytest.skip(
+                    "Test skipped because it's marked as slower({}) than the value provided "
+                    "by '--tests-slower-than={}', {}".format(
+                        slow_test_timedelta,
+                        tests_slower_than_value,
+                        tests_slower_than_timedelta,
+                    )
+                )
+    if tests_faster_than_value > 0:
+        slow_test_marker = item.get_closest_marker("slow_test")
+        # It the test is not maked with slow_test, it's assumed that it's faster than the 1 second default
+        if slow_test_marker is not None:
+            if slow_test_marker.args:
+                raise RuntimeError(
+                    "The 'slow_test' marker does not support arguments, only keyword arguments, the "
+                    "same that 'datetime.datetime.timedelta' accepts."
+                )
+            slow_test_timedelta = timedelta(**slow_test_marker.kwargs)
+            tests_faster_than_timedelta = timedelta(seconds=tests_faster_than_value)
+            if slow_test_timedelta <= tests_faster_than_timedelta:
+                item._skipped_by_mark = True
+                pytest.skip(
+                    "Test skipped because it's marked as slower({}) than the value provided "
+                    "by '--tests-faster-than={}', {}".format(
+                        slow_test_timedelta,
+                        tests_faster_than_value,
+                        tests_faster_than_timedelta,
+                    )
+                )
+        else:
+            # Non marked tests are considered to take less than 0.01 seconds
+            slow_test_timedelta = timedelta(seconds=0.01)
+            tests_faster_than_timedelta = timedelta(seconds=tests_faster_than_value)
+            if slow_test_timedelta <= tests_faster_than_timedelta:
+                item._skipped_by_mark = True
+                pytest.skip(
+                    "Test skipped because it's marked as slower({}) than the value provided "
+                    "by '--tests-faster-than={}', {}".format(
+                        slow_test_timedelta,
+                        tests_faster_than_value,
+                        tests_faster_than_timedelta,
+                    )
+                )
 
     requires_salt_modules_marker = item.get_closest_marker("requires_salt_modules")
     if requires_salt_modules_marker is not None:
