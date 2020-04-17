@@ -623,6 +623,10 @@ def _pytest(session, coverage, cmd_args):
         # https://stackoverflow.com/questions/50168647/multiprocessing-causes-python-to-crash-and-gives-an-error-may-have-been-in-progr
         env = {"OBJC_DISABLE_INITIALIZE_FORK_SAFETY": "YES"}
 
+    session.run(
+        "python", "-m", "pytest", *(cmd_args + ["--collect-only", "-qq"]), env=env
+    )
+
     try:
         if coverage is True:
             _run_with_coverage(
