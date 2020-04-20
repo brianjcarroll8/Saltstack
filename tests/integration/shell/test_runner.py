@@ -6,6 +6,7 @@ Tests for the salt-run command
 from __future__ import absolute_import
 
 import re
+import time
 
 import pytest
 import salt.utils.files
@@ -99,6 +100,7 @@ class TestSaltRun(object):
         test salt-run with eauth
         tests all eauth args
         """
+        time.sleep(1)
         ret = salt_run_cli.run(
             flag,
             "pam",
