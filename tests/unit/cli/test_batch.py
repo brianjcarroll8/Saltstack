@@ -6,6 +6,8 @@
 # Import python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 from salt.cli.batch import Batch
 from tests.support.mock import MagicMock, patch
@@ -68,6 +70,7 @@ class BatchTestCase(TestCase):
         self.batch.minions = ["foo", "bar", "baz"]
         self.assertEqual(Batch.get_bnum(self.batch), 4)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_get_bnum_invalid_batch_data(self):
         """
         Tests when an invalid batch value is passed

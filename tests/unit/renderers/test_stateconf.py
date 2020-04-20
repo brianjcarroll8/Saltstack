@@ -7,6 +7,7 @@ import os
 import os.path
 import tempfile
 
+import pytest
 import salt.config
 
 # Import Salt libs
@@ -166,6 +167,7 @@ state_id:
         self.assertTrue("test::test" in result)
         self.assertTrue("state_id" in result)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_dot_state_id_in_requisites(self):
         for req in REQUISITES:
             result = self._render_sls(
@@ -194,6 +196,7 @@ state_id:
                 result["state_id"]["cmd.run"][2][req][0]["cmd"], "test::test"
             )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_relative_include_with_requisites(self):
         for req in REQUISITES:
             result = self._render_sls(
@@ -235,6 +238,7 @@ extend:
         )
         self.assertTrue("test.utils::some_state" in result["extend"])
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_multilevel_relative_include_with_requisites(self):
         for req in REQUISITES:
             result = self._render_sls(
@@ -313,6 +317,7 @@ B:
         reqs = result["test.goalstate::goal"]["stateconf.set"][0]["require"]
         self.assertEqual(set([next(six.itervalues(i)) for i in reqs]), set("ABCDE"))
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_implicit_require_with_goal_state(self):
         result = self._render_sls(
             """

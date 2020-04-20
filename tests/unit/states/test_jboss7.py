@@ -4,6 +4,8 @@
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt libs
 import salt.states.jboss7 as jboss7
 from salt.exceptions import CommandExecutionError
@@ -37,6 +39,7 @@ class JBoss7StateTestCase(TestCase, LoaderModuleMockMixin):
             }
         }
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_should_not_redeploy_unchanged(self):
         # given
         parameters = {
@@ -187,6 +190,7 @@ class JBoss7StateTestCase(TestCase, LoaderModuleMockMixin):
             self.assertTrue(jboss7_undeploy_mock.called)
             self.assertTrue(jboss7_deploy_mock.called)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_should_deploy_different_artifact(self):
         # given
         parameters = {

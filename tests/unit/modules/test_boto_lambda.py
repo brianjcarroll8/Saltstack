@@ -8,6 +8,7 @@ import random
 import string
 from tempfile import NamedTemporaryFile
 
+import pytest
 import salt.config
 import salt.loader
 import salt.modules.boto_lambda as boto_lambda
@@ -900,6 +901,7 @@ class BotoLambdaEventSourceMappingTestCase(
         )
         self.assertTrue(result["deleted"])
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_deleting_an_event_source_mapping_without_identifier_the_delete_event_source_mapping_method_raises_saltinvocationexception(
         self,
     ):

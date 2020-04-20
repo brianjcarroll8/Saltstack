@@ -5,6 +5,8 @@
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 import salt.states.keyboard as keyboard
 
@@ -59,6 +61,7 @@ class KeyboardTestCase(TestCase, LoaderModuleMockMixin):
 
     # 'xorg' function tests: 1
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_xorg(self):
         """
         Test to set the keyboard layout for XOrg.

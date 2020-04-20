@@ -271,6 +271,7 @@ class MacUtilsTestCase(TestCase, LoaderModuleMockMixin):
     @patch("salt.utils.path.os_walk")
     @patch("os.path.exists")
     @patch("plistlib.readPlist" if six.PY2 else "plistlib.load")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_available_services_broken_symlink(
         self, mock_read_plist, mock_exists, mock_os_walk
     ):

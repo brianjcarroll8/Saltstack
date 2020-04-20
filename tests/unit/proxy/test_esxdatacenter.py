@@ -8,6 +8,7 @@
 # Import Python Libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
 import salt.exceptions
 
 # Import Salt Libs
@@ -134,6 +135,7 @@ class InitTestCase(TestCase, LoaderModuleMockMixin):
             "'passwords' key found in proxy config.",
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_no_domain(self):
         opts = self.opts_sspi.copy()
         del opts["proxy"]["domain"]

@@ -136,6 +136,7 @@ class Base(TestCase, LoaderModuleMockMixin):
 @pytest.mark.skip_if_binaries_missing("tar")
 class BuildoutTestCase(Base):
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_onlyif_unless(self):
         b_dir = os.path.join(self.tdir, "b")
         ret = buildout.buildout(b_dir, onlyif=RUNTIME_VARS.SHELL_FALSE_PATH)
@@ -146,6 +147,7 @@ class BuildoutTestCase(Base):
         self.assertTrue(ret["status"] is True)
 
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_salt_callback(self):
         @buildout._salt_callback
         def callback1(a, b=1):
@@ -203,6 +205,7 @@ class BuildoutTestCase(Base):
         # pylint: enable=invalid-sequence-index
 
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_get_bootstrap_url(self):
         for path in [
             os.path.join(self.tdir, "var/ver/1/dumppicked"),
@@ -227,6 +230,7 @@ class BuildoutTestCase(Base):
             )
 
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_get_buildout_ver(self):
         for path in [
             os.path.join(self.tdir, "var/ver/1/dumppicked"),
@@ -247,6 +251,7 @@ class BuildoutTestCase(Base):
             )
 
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_get_bootstrap_content(self):
         self.assertEqual(
             "",
@@ -262,6 +267,7 @@ class BuildoutTestCase(Base):
         )
 
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_logger_clean(self):
         buildout.LOG.clear()
         # nothing in there
@@ -280,6 +286,7 @@ class BuildoutTestCase(Base):
         )
 
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_logger_loggers(self):
         buildout.LOG.clear()
         # nothing in there
@@ -292,6 +299,7 @@ class BuildoutTestCase(Base):
             self.assertEqual(buildout.LOG.by_level[i][-1], "moo")
 
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test__find_cfgs(self):
         result = sorted(
             [a.replace(self.root, "") for a in buildout._find_cfgs(self.root)]
@@ -459,6 +467,7 @@ class BuildoutOnlineTestCase(Base):
         )
 
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_run_buildout(self):
         if salt.modules.virtualenv_mod.virtualenv_ver(self.ppy_st) >= (20, 0, 0):
             self.skipTest(
@@ -474,6 +483,7 @@ class BuildoutOnlineTestCase(Base):
         self.assertTrue("Installing b" in out)
 
     @pytest.mark.requires_network
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_buildout(self):
         if salt.modules.virtualenv_mod.virtualenv_ver(self.ppy_st) >= (20, 0, 0):
             self.skipTest(

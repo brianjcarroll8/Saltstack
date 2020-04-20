@@ -3,6 +3,8 @@
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Testing Libs
 from tests.support.case import SSHCase
 
@@ -12,6 +14,7 @@ class SSHJinjaFiltersTest(SSHCase):
     testing Jinja filters are available via state system & salt-ssh
     """
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_dateutils_strftime(self):
         """
         test jinja filter datautils.strftime

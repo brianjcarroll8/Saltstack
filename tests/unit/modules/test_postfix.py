@@ -6,6 +6,8 @@
 # Import Python libs
 from __future__ import absolute_import
 
+import pytest
+
 # Import Salt Libs
 import salt.modules.postfix as postfix
 
@@ -45,6 +47,7 @@ class PostfixTestCase(TestCase, LoaderModuleMockMixin):
         with patch.object(postfix, "_parse_main", return_value=({"A": "a"}, ["b"])):
             self.assertDictEqual(postfix.show_main("path"), {"A": "a"})
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_set_main(self):
         """
         Test for set a single config value in the master.cf file

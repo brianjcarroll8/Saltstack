@@ -14,6 +14,7 @@ import re
 import shutil
 import tempfile
 
+import pytest
 import salt.config
 import salt.modules.config as config
 import salt.modules.virt as virt
@@ -106,6 +107,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
         mock_domain.name.return_value = name
         return mock_domain
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_disk_profile_merge(self):
         """
         Test virt._disk_profile() when merging with user-defined disks
@@ -166,6 +168,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
         root = ET.fromstring(xml_data)
         self.assertEqual(root.find("os/boot").attrib["dev"], "cdrom")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_boot_multiple_devs(self):
         """
         Test virt._gen_xml() multiple boot devices
@@ -187,6 +190,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
         devs = root.findall(".//boot")
         self.assertTrue(len(devs) == 2)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_gen_xml_no_nic(self):
         """
         Test virt._gen_xml() serial console
@@ -393,6 +397,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
             root.find("devices/graphics/listen").attrib["address"], "0.0.0.0"
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_gen_xml_spice(self):
         """
         Test virt._gen_xml() with spice graphics device
@@ -960,6 +965,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
             ],
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_diff_nics(self):
         """
         Test virt._diff_nics()
@@ -1979,6 +1985,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
     @patch("salt.modules.virt.stop", return_value=True)
     @patch("salt.modules.virt.undefine")
     @patch("os.remove")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_purge_default(self, mock_remove, mock_undefine, mock_stop):
         """
         Test virt.purge() with default parameters
@@ -2032,6 +2039,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
     @patch("salt.modules.virt.stop", return_value=True)
     @patch("salt.modules.virt.undefine")
     @patch("os.remove")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_purge_removable(self, mock_remove, mock_undefine, mock_stop):
         """
         Test virt.purge(removables=True)
@@ -2651,6 +2659,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
         actual = virt.list_networks()
         self.assertEqual(names, actual)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_network_info(self):
         """
         Test virt.network_info()
@@ -2710,6 +2719,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
             net,
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_network_info_all(self):
         """
         Test virt.network_info()
@@ -3239,6 +3249,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
             pool,
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_pool_get_xml(self):
         """
         Test virt.pool_get_xml
@@ -3294,6 +3305,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
             self.mock_libvirt.VIR_STORAGE_POOL_DELETE_NORMAL
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_full_info(self):
         """
         Test virt.full_info
@@ -3649,6 +3661,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
         self.mock_conn.storagePoolDefineXML.assert_called_once_with(expected_xml)
         mock_secret.setValue.assert_called_once_with(b"secret")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_volume_infos(self):
         """
         Test virt.volume_infos
@@ -3960,6 +3973,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
                 },
             )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_volume_delete(self):
         """
         Test virt.volume_delete
@@ -4062,6 +4076,7 @@ class VirtTestCase(TestCase, LoaderModuleMockMixin):
         )
 
     @patch("salt.modules.virt.get_hypervisor", return_value="kvm")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_pool_capabilities_computed(self, mock_get_hypervisor):
         """
         Test virt.pool_capabilities where libvirt doesn't have the pool-capabilities feature

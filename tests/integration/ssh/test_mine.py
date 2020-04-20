@@ -6,6 +6,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 import os
 import shutil
 
+import pytest
+
 # Import Salt Libs
 import salt.utils.platform
 
@@ -20,6 +22,7 @@ class SSHMineTest(SSHCase):
     testing salt-ssh with mine
     """
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_ssh_mine_get(self):
         """
         test salt-ssh with mine

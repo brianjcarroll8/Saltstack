@@ -3,6 +3,8 @@
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 import salt.utils.platform
 
@@ -17,6 +19,7 @@ class SSHPillarTest(SSHCase):
     testing pillar with salt-ssh
     """
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_pillar_items(self):
         """
         test pillar.items with salt-ssh
@@ -27,6 +30,7 @@ class SSHPillarTest(SSHCase):
             {"knights": ["Lancelot", "Galahad", "Bedevere", "Robin"]}, ret
         )
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_pillar_get(self):
         """
         test pillar.get with salt-ssh
@@ -34,6 +38,7 @@ class SSHPillarTest(SSHCase):
         ret = self.run_function("pillar.get", ["monty"])
         self.assertEqual(ret, "python")
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_pillar_get_doesnotexist(self):
         """
         test pillar.get when pillar does not exist with salt-ssh

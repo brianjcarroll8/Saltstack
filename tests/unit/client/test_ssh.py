@@ -10,6 +10,7 @@ import re
 import shutil
 import tempfile
 
+import pytest
 import salt.config
 import salt.roster
 import salt.utils.files
@@ -34,6 +35,7 @@ self:
 
 @skipIf(not salt.utils.path.which("ssh"), "No ssh binary found in path")
 class SSHPasswordTests(ShellCase):
+    @pytest.mark.slow_test(seconds=10)  # Test takes >5 and <=10 seconds
     def test_password_failure(self):
         """
         Check password failures when trying to deploy keys
@@ -74,6 +76,7 @@ class SSHPasswordTests(ShellCase):
 
 
 class SSHRosterDefaults(TestCase):
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_roster_defaults_flat(self):
         """
         Test Roster Defaults on the flat roster
@@ -194,6 +197,7 @@ class SSHSingleTests(TestCase):
             mock_flight.assert_called()
             assert ret == cmd_ret
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_run_with_pre_flight_stderr(self):
         """
         test Single.run() when ssh_pre_flight is set
@@ -324,6 +328,7 @@ class SSHSingleTests(TestCase):
                 call("rm '{0}'".format(script)),
             ] == mock_cmd.call_args_list
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_shim_cmd(self):
         """
         test Single.shim_cmd()

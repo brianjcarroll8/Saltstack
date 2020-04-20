@@ -5,6 +5,8 @@
 # Import python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import salt modules
 import salt.modules.junos as junos
 
@@ -402,6 +404,7 @@ class Test_Junos_Module(TestCase, LoaderModuleMockMixin, XMLEqualityMixin):
             ret["out"] = False
             self.assertEqual(junos.set_hostname("Test-name"), ret)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_set_hostname_raise_exception_for_commit_check(self):
         with patch("jnpr.junos.utils.config.Config.commit_check") as mock_commit_check:
             mock_commit_check.side_effect = self.raise_exception
@@ -594,6 +597,7 @@ class Test_Junos_Module(TestCase, LoaderModuleMockMixin, XMLEqualityMixin):
             ret["out"] = False
             self.assertEqual(junos.commit(), ret)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_commit_pyez_commit_check_returns_false(self):
         with patch("jnpr.junos.utils.config.Config.commit_check") as mock_commit_check:
             mock_commit_check.return_value = False
@@ -851,6 +855,7 @@ class Test_Junos_Module(TestCase, LoaderModuleMockMixin, XMLEqualityMixin):
             junos.diff()
             mock_diff.assert_called_with(rb_id=0)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_diff_with_arg(self):
         with patch("jnpr.junos.utils.config.Config.diff") as mock_diff:
             junos.diff(id=2)
@@ -902,6 +907,7 @@ class Test_Junos_Module(TestCase, LoaderModuleMockMixin, XMLEqualityMixin):
             ret["out"] = False
             self.assertEqual(junos.ping("1.1.1.1"), ret)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_cli_without_args(self):
         ret = dict()
         ret["message"] = "Please provide the CLI command to be executed."
@@ -1117,6 +1123,7 @@ class Test_Junos_Module(TestCase, LoaderModuleMockMixin, XMLEqualityMixin):
             self.assertEqual(junos.install_config("actual/path/config.set"), ret)
             mock_load.assert_called_with(path="test/path/config", format="set")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_install_config_xml_file(self):
         with patch("jnpr.junos.utils.config.Config.commit") as mock_commit, patch(
             "jnpr.junos.utils.config.Config.commit_check"
@@ -1145,6 +1152,7 @@ class Test_Junos_Module(TestCase, LoaderModuleMockMixin, XMLEqualityMixin):
             self.assertEqual(junos.install_config("actual/path/config.xml"), ret)
             mock_load.assert_called_with(path="test/path/config", format="xml")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_install_config_text_file(self):
         with patch("jnpr.junos.utils.config.Config.commit") as mock_commit, patch(
             "jnpr.junos.utils.config.Config.commit_check"
@@ -1518,6 +1526,7 @@ class Test_Junos_Module(TestCase, LoaderModuleMockMixin, XMLEqualityMixin):
             ret["out"] = False
             self.assertEqual(junos.install_config("actual/path/config"), ret)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_zeroize(self):
         with patch("jnpr.junos.device.Device.cli") as mock_cli:
             result = junos.zeroize()
@@ -1811,6 +1820,7 @@ class Test_Junos_Module(TestCase, LoaderModuleMockMixin, XMLEqualityMixin):
             )
             self.assertEqualXML(exec_args[0][0], expected_rpc)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_rpc_get_interface_information(self):
         with patch("jnpr.junos.device.Device.execute") as mock_execute:
             junos.rpc("get-interface-information", format="json")
@@ -1844,6 +1854,7 @@ class Test_Junos_Module(TestCase, LoaderModuleMockMixin, XMLEqualityMixin):
             )
             self.assertEqualXML(etree.tostring(args[0][0]), expected_rpc)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_rpc_get_chassis_inventory_filter_as_arg(self):
         with patch("salt.modules.junos.jxmlease.parse") as mock_jxmlease, patch(
             "salt.modules.junos.etree.tostring"

@@ -9,6 +9,7 @@ import logging
 import os
 import textwrap
 
+import pytest
 import salt.config
 import salt.minion
 import salt.syspaths
@@ -79,6 +80,7 @@ class SampleConfTest(DefaultConfigsBase, TestCase):
     Validate files in the salt/conf directory.
     """
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_conf_master_sample_is_commented(self):
         """
         The sample config file located in salt/conf/master must be completely
@@ -312,6 +314,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         "You can't set an environment dynamically in Windows",
     )
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_load_master_config_from_environ_var(self, tempdir):
         env_root_dir = os.path.join(tempdir, "foo", "env")
         os.makedirs(env_root_dir)
@@ -369,6 +372,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             self.assertEqual(config["log_file"], fpath)
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_load_client_config_from_environ_var(self, tempdir):
         env_root_dir = os.path.join(tempdir, "foo", "env")
         os.makedirs(env_root_dir)
@@ -542,6 +546,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         assert ret == {"base": expected}
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_master_id_function(self, tempdir):
         master_config = os.path.join(tempdir, "master")
 
@@ -614,6 +619,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         )
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_minion_id_function(self, tempdir):
         minion_config = os.path.join(tempdir, "minion")
 
@@ -633,6 +639,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         self.assertEqual(config["id"], "hello_world")
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_minion_id_lowercase(self, tempdir):
         """
         This tests that setting `minion_id_lowercase: True` does lower case
@@ -658,6 +665,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         self.assertEqual(config["id"], "king_bob")
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=10)  # Test takes >5 and <=10 seconds
     def test_minion_id_remove_domain_string_positive(self, tempdir):
         """
         This tests that the values of `minion_id_remove_domain` is suppressed from a generated minion id,
@@ -683,6 +691,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         self.assertEqual(config["id"], "king_bob")
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_minion_id_remove_domain_string_negative(self, tempdir):
         """
         See above
@@ -705,6 +714,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         self.assertEqual(config["id"], "king_bob.foo.org")
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_minion_id_remove_domain_bool_true(self, tempdir):
         """
         See above
@@ -726,6 +736,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         self.assertEqual(config["id"], "king_bob")
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_minion_id_remove_domain_bool_false(self, tempdir):
         """
         See above
@@ -747,6 +758,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         self.assertEqual(config["id"], "king_bob.foo.org")
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_backend_rename(self, tempdir):
         """
         This tests that we successfully rename git, hg, svn, and minion to
@@ -870,6 +882,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         _count_strings(config)
         return tally
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_conf_file_strings_are_unicode_for_master(self):
         """
         This ensures that any strings which are loaded are unicode strings
@@ -881,6 +894,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         self.assertEqual(len(non_unicode), 8 if six.PY2 else 0, non_unicode)
         self.assertTrue(tally["unicode"] > 0)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_conf_file_strings_are_unicode_for_minion(self):
         """
         This ensures that any strings which are loaded are unicode strings
@@ -1615,6 +1629,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         "You can't set an environment dynamically in Windows",
     )
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_load_cloud_config_from_environ_var(self, tempdir):
         env_root_dir = os.path.join(tempdir, "foo", "env")
         os.makedirs(env_root_dir)
@@ -1642,6 +1657,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             self.assertEqual(config["log_file"], fpath)
 
     @with_tempdir()
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_deploy_search_path_as_string(self, temp_conf_dir):
         config_file_path = os.path.join(temp_conf_dir, "cloud")
         deploy_dir_path = os.path.join(temp_conf_dir, "test-deploy.d")
@@ -1664,6 +1680,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             deploy_dir_path, default_config["deploy_scripts_search_path"][0]
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_includes_load(self):
         """
         Tests that cloud.{providers,profiles}.d directories are loaded, even if not
@@ -1676,6 +1693,7 @@ class ConfigTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
 
     # <---- Salt Cloud Configuration Tests ---------------------------------------------
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_include_config_without_errors(self):
         """
         Tests that include_config function returns valid configuration

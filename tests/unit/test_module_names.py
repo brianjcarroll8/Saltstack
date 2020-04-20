@@ -9,6 +9,7 @@ from __future__ import absolute_import
 import fnmatch
 import os
 
+import pytest
 import salt.utils.path
 import salt.utils.stringutils
 from tests.support.paths import list_test_mods
@@ -98,6 +99,7 @@ class BadTestModuleNamesTestCase(TestCase):
         error_msg += "If it is a tests module, then please rename as suggested."
         self.assertEqual([], bad_names, error_msg)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_module_name_source_match(self):
         """
         Check all the test mods and check if they correspond to actual files in

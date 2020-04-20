@@ -6,6 +6,7 @@ from __future__ import absolute_import
 import os
 import sys
 
+import pytest
 import salt.modules.pip as pip
 
 # Import salt libs
@@ -375,6 +376,7 @@ class PipTestCase(TestCase, LoaderModuleMockMixin):
                     python_shell=False,
                 )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_non_writeable_log(self):
         with patch("os.path") as mock_path:
             # Let's fake a non-writable log file

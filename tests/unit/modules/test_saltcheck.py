@@ -6,6 +6,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import os.path
 
+import pytest
 import salt.config
 import salt.modules.saltcheck as saltcheck
 import salt.syspaths as syspaths
@@ -33,6 +34,7 @@ class SaltcheckTestCase(TestCase, LoaderModuleMockMixin):
         self.addCleanup(patcher.stop)
         return {saltcheck: {"__opts__": local_opts}}
 
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_call_salt_command(self):
         """test simple test.echo module"""
         with patch.dict(
@@ -49,6 +51,7 @@ class SaltcheckTestCase(TestCase, LoaderModuleMockMixin):
             )
             self.assertEqual(returned, "hello")
 
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_call_salt_command2(self):
         """test simple test.echo module again"""
         with patch.dict(
@@ -467,6 +470,7 @@ class SaltcheckTestCase(TestCase, LoaderModuleMockMixin):
             mybool = sc_instance._SaltCheck__assert_not_empty("")
             self.assertNotEqual(mybool, "Pass")
 
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_run_test_1(self):
         """test"""
         with patch.dict(
@@ -505,6 +509,7 @@ class SaltcheckTestCase(TestCase, LoaderModuleMockMixin):
                 returned = saltcheck.report_highstate_tests()
                 self.assertEqual(returned, expected_output)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_validation(self):
         """test validation of tests"""
         sc_instance = saltcheck.SaltCheck()

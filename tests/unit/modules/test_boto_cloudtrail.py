@@ -7,6 +7,8 @@ import logging
 import random
 import string
 
+import pytest
+
 # Import Salt libs
 import salt.config
 import salt.loader
@@ -154,6 +156,7 @@ class BotoCloudTrailTestCase(BotoCloudTrailTestCaseBase, BotoCloudTrailTestCaseM
 
         self.assertTrue(result["exists"])
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_checking_if_a_trail_exists_and_a_trail_does_not_exist_the_trail_exists_method_returns_false(
         self,
     ):
@@ -212,6 +215,7 @@ class BotoCloudTrailTestCase(BotoCloudTrailTestCaseBase, BotoCloudTrailTestCaseM
             result.get("error", {}).get("message"), error_message.format("create_trail")
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_deleting_a_trail_succeeds_the_delete_trail_method_returns_true(
         self,
     ):
@@ -315,6 +319,7 @@ class BotoCloudTrailTestCase(BotoCloudTrailTestCaseBase, BotoCloudTrailTestCaseM
         result = boto_cloudtrail.list(**conn_parameters)
         self.assertFalse(result["trails"])
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_listing_trail_fails_the_list_trail_method_returns_error(self):
         """
         tests False trail error.
@@ -370,6 +375,7 @@ class BotoCloudTrailTestCase(BotoCloudTrailTestCaseBase, BotoCloudTrailTestCaseM
 
         self.assertTrue(result["started"])
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_start_logging_fails_the_start_logging_method_returns_false(self):
         """
         tests False logging not started.

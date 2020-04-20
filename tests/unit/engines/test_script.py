@@ -5,6 +5,8 @@ unit tests for the script engine
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 import salt.config
 import salt.engines.script as script
@@ -37,6 +39,7 @@ class EngineScriptTestCase(TestCase, LoaderModuleMockMixin):
         with self.assertRaises(CommandExecutionError):
             script._get_serializer("bad")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test__read_stdout(self):
         """
         Test we can yield stdout

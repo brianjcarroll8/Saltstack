@@ -10,6 +10,7 @@ import logging
 import os
 import sys
 
+import pytest
 import salt.utils.files
 
 # Import Salt libs
@@ -125,6 +126,7 @@ class RenderTestCase(TestCase):
         self.assertEqual(res, "OK")
 
     ### Tests for genshi template (xml-based)
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_render_genshi_sanity(self):
         tmpl = """<RU>OK</RU>"""
         res = salt.utils.templates.render_genshi_tmpl(tmpl, dict(self.context))

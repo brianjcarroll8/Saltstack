@@ -6,6 +6,8 @@
 # Import Python Libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 import salt.modules.nftables as nftables
 import salt.utils.files
@@ -561,6 +563,7 @@ class NftablesTestCase(TestCase, LoaderModuleMockMixin):
         with patch.dict(nftables.__salt__, {"cmd.run": mock}):
             self.assertEqual(nftables.append(chain="input", rule=_ru), _expected)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_append_rule(self):
         """
         Test if it append a rule to the specified table & chain.

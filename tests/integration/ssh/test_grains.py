@@ -3,6 +3,8 @@
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 import salt.utils.platform
 
@@ -17,6 +19,7 @@ class SSHGrainsTest(SSHCase):
     testing grains with salt-ssh
     """
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_grains_items(self):
         """
         test grains.items with salt-ssh

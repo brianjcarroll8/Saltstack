@@ -11,6 +11,7 @@ import platform
 import socket
 import textwrap
 
+import pytest
 import salt.grains.core as core
 import salt.modules.cmdmod
 import salt.modules.smbios
@@ -173,6 +174,7 @@ class CoreGrainsTestCase(TestCase, LoaderModuleMockMixin):
         self.assertEqual(os_release, {})
 
     @skipIf(not salt.utils.platform.is_windows(), "System is not Windows")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test__windows_platform_data(self):
         grains = core._windows_platform_data()
         keys = [
@@ -695,6 +697,7 @@ class CoreGrainsTestCase(TestCase, LoaderModuleMockMixin):
         self._run_os_grains_tests("ubuntu-17.10", _os_release_map, expectation)
 
     @skipIf(not salt.utils.platform.is_windows(), "System is not Windows")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_windows_platform_data(self):
         """
         Test the _windows_platform_data function
@@ -1560,6 +1563,7 @@ class CoreGrainsTestCase(TestCase, LoaderModuleMockMixin):
             # change back to original directory
             os.chdir(cwd)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_virtual_set_virtual_grain(self):
         osdata = {}
 
@@ -1586,6 +1590,7 @@ class CoreGrainsTestCase(TestCase, LoaderModuleMockMixin):
 
         self.assertIn("virtual", virtual_grains)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_virtual_has_virtual_grain(self):
         osdata = {"virtual": "something"}
 
@@ -1669,6 +1674,7 @@ class CoreGrainsTestCase(TestCase, LoaderModuleMockMixin):
         self.assertNotEqual(virtual_grains["virtual"], "physical")
 
     @skipIf(not salt.utils.platform.is_windows(), "System is not Windows")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_osdata_virtual_key_win(self):
         with patch.dict(
             core.__salt__,

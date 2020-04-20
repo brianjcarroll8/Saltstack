@@ -8,6 +8,8 @@ import random
 import string
 from copy import deepcopy
 
+import pytest
+
 # Import Salt libs
 import salt.loader
 import salt.modules.boto_s3_bucket as boto_s3_bucket
@@ -707,6 +709,7 @@ class BotoS3BucketTestCase(BotoS3BucketTestCaseBase, BotoS3BucketTestCaseMixin):
             error_message.format("delete_bucket_lifecycle_configuration"),
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_deleting_policy_succeeds_the_delete_policy_method_returns_true(
         self,
     ):
@@ -742,6 +745,7 @@ class BotoS3BucketTestCase(BotoS3BucketTestCaseBase, BotoS3BucketTestCaseMixin):
 
         self.assertTrue(result["deleted"])
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_deleting_replication_fails_the_delete_replication_method_returns_error(
         self,
     ):

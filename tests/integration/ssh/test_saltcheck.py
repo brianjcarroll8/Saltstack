@@ -3,6 +3,8 @@
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 import salt.utils.platform
 
@@ -17,6 +19,7 @@ class SSHSaltcheckTest(SSHCase):
     testing saltcheck with salt-ssh
     """
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_saltcheck_run_test(self):
         """
         test saltcheck.run_test with salt-ssh
@@ -30,6 +33,7 @@ class SSHSaltcheckTest(SSHCase):
         ret = self.run_function("saltcheck.run_test", test=saltcheck_test)
         self.assertDictContainsSubset({"status": "Pass"}, ret)
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_saltcheck_state(self):
         """
         saltcheck.run_state_tests

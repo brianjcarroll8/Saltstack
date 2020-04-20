@@ -28,6 +28,7 @@ class GrainsTargetingTest(ShellCase):
     Integration tests for targeting with grains.
     """
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_grains_targeting_os_running(self):
         """
         Tests running "salt -G 'os:<system-os>' test.ping and minions both return True
@@ -42,6 +43,7 @@ class GrainsTargetingTest(ShellCase):
         ret = self.run_salt('-G "os:{0}" test.ping'.format(os_grain))
         self.assertEqual(sorted(ret), sorted(test_ret))
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_grains_targeting_minion_id_running(self):
         """
         Tests return of each running test minion targeting with minion id grain
@@ -53,6 +55,7 @@ class GrainsTargetingTest(ShellCase):
         self.assertEqual(sorted(sub_minion), sorted(["sub_minion:", "    True"]))
 
     @pytest.mark.flaky(max_runs=4)
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_grains_targeting_disconnected(self):
         """
         Tests return of minion using grains targeting on a disconnected minion.
@@ -92,6 +95,7 @@ class SSHGrainsTest(SSHCase):
     Depend on proper environment set by SSHCase class
     """
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_grains_id(self):
         """
         Test salt-ssh grains id work for localhost.

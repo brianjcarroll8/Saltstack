@@ -1399,6 +1399,7 @@ class TestCustomExtensions(TestCase):
         self.assertEqual(rendered, "16777216")
 
     @pytest.mark.flaky(max_runs=4)
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_http_query(self):
         """
         Test the `http_query` Jinja filter.

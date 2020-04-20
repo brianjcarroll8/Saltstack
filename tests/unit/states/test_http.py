@@ -5,6 +5,8 @@
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 import salt.states.http as http
 
@@ -131,6 +133,7 @@ class HttpTestCase(TestCase, LoaderModuleMockMixin):
                     state_return,
                 )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_wait_for_with_interval(self):
         """
         Test for wait_for_successful_query waits for request_interval

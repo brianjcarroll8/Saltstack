@@ -623,6 +623,7 @@ class SSHThinTestCase(TestCase):
     @patch("salt.utils.thin.shutil", MagicMock())
     @patch("salt.utils.path.which", MagicMock(return_value=""))
     @patch("salt.utils.thin._get_thintar_prefix", MagicMock())
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_gen_thin_python_exist_or_not(self):
         """
         Test thin.gen_thin function if the opposite python
@@ -689,6 +690,7 @@ class SSHThinTestCase(TestCase):
     @patch("salt.utils.thin._six.PY2", False)
     @patch("salt.utils.thin.sys.version_info", _version_info(None, 3, 6))
     @patch("salt.utils.path.which", MagicMock(return_value="/usr/bin/python"))
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_gen_thin_compression_fallback_py3(self):
         """
         Test thin.gen_thin function if fallbacks to the gzip compression, once setup wrong.

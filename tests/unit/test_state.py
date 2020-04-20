@@ -43,6 +43,7 @@ class StateCompilerTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         }
         salt.state.format_log(ret)
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_render_error_on_invalid_requisite(self):
         """
         Test that the state compiler correctly deliver a rendering
@@ -89,6 +90,7 @@ class StateCompilerTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             with self.assertRaises(salt.exceptions.SaltRenderError):
                 state_obj.call_high(high_data)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_verify_onlyif_parse(self):
         low_data = {
             "onlyif": [{"fun": "test.arg", "args": ["arg1", "arg2"]}],
@@ -111,6 +113,7 @@ class StateCompilerTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             return_result = state_obj._run_check_onlyif(low_data, "")
             self.assertEqual(expected_result, return_result)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_verify_unless_parse(self):
         low_data = {
             "unless": [{"fun": "test.arg", "args": ["arg1", "arg2"]}],
@@ -151,6 +154,7 @@ class StateCompilerTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             return path
 
     @with_tempfile()
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_verify_onlyif_parse_slots(self, name):
         with salt.utils.files.fopen(name, "w") as fp:
             fp.write("file-contents")
@@ -185,6 +189,7 @@ class StateCompilerTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             self.assertEqual(expected_result, return_result)
 
     @with_tempfile()
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_verify_unless_parse_slots(self, name):
         with salt.utils.files.fopen(name, "w") as fp:
             fp.write("file-contents")
@@ -292,26 +297,31 @@ class HighStateTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
     def tearDown(self):
         self.highstate.pop_active()
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_top_matches_with_list(self):
         top = {"env": {"match": ["state1", "state2"], "nomatch": ["state3"]}}
         matches = self.highstate.top_matches(top)
         self.assertEqual(matches, {"env": ["state1", "state2"]})
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_top_matches_with_string(self):
         top = {"env": {"match": "state1", "nomatch": "state2"}}
         matches = self.highstate.top_matches(top)
         self.assertEqual(matches, {"env": ["state1"]})
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_matches_whitelist(self):
         matches = {"env": ["state1", "state2", "state3"]}
         matches = self.highstate.matches_whitelist(matches, ["state2"])
         self.assertEqual(matches, {"env": ["state2"]})
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_matches_whitelist_with_string(self):
         matches = {"env": ["state1", "state2", "state3"]}
         matches = self.highstate.matches_whitelist(matches, "state2,state3")
         self.assertEqual(matches, {"env": ["state2", "state3"]})
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_show_state_usage(self):
         # monkey patch sub methods
         self.highstate.avail = {"base": ["state.a", "state.b", "state.c"]}
@@ -338,6 +348,7 @@ class HighStateTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         self.assertEqual(state_usage_dict["base"]["used"], ["state.a", "state.b"])
         self.assertEqual(state_usage_dict["base"]["unused"], ["state.c"])
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_find_sls_ids_with_exclude(self):
         """
         See https://github.com/saltstack/salt/issues/47182
@@ -468,6 +479,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             minion_opts = self.get_temp_config("minion")
             self.state_obj = salt.state.State(minion_opts)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_format_slots_no_slots(self):
         """
         Test the format slots keeps data without slots untouched.
@@ -476,6 +488,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         self.state_obj.format_slots(cdata)
         self.assertEqual(cdata, {"args": ["arg"], "kwargs": {"key": "val"}})
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_format_slots_arg(self):
         """
         Test the format slots is calling a slot specified in args with corresponding arguments.
@@ -490,6 +503,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         mock.assert_called_once_with("fun_arg", fun_key="fun_val")
         self.assertEqual(cdata, {"args": ["fun_return"], "kwargs": {"key": "val"}})
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_format_slots_dict_arg(self):
         """
         Test the format slots is calling a slot specified in dict arg.
@@ -506,6 +520,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             cdata, {"args": [{"subarg": "fun_return"}], "kwargs": {"key": "val"}}
         )
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_format_slots_listdict_arg(self):
         """
         Test the format slots is calling a slot specified in list containing a dict.
@@ -522,6 +537,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             cdata, {"args": [[{"subarg": "fun_return"}]], "kwargs": {"key": "val"}}
         )
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_format_slots_liststr_arg(self):
         """
         Test the format slots is calling a slot specified in list containing a dict.
@@ -536,6 +552,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         mock.assert_called_once_with("fun_arg", fun_key="fun_val")
         self.assertEqual(cdata, {"args": [["fun_return"]], "kwargs": {"key": "val"}})
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_format_slots_kwarg(self):
         """
         Test the format slots is calling a slot specified in kwargs with corresponding arguments.
@@ -550,6 +567,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         mock.assert_called_once_with("fun_arg", fun_key="fun_val")
         self.assertEqual(cdata, {"args": ["arg"], "kwargs": {"key": "fun_return"}})
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_format_slots_multi(self):
         """
         Test the format slots is calling all slots with corresponding arguments when multiple slots
@@ -591,6 +609,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             },
         )
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_format_slots_malformed(self):
         """
         Test the format slots keeps malformed slots untouched.
@@ -620,6 +639,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         mock.assert_not_called()
         self.assertEqual(cdata, sls_data)
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_slot_traverse_dict(self):
         """
         Test the slot parsing of dict response.
@@ -635,6 +655,7 @@ class StateFormatSlotsTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         mock.assert_called_once_with("fun_arg", fun_key="fun_val")
         self.assertEqual(cdata, {"args": ["arg"], "kwargs": {"key": "value1"}})
 
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_slot_append(self):
         """
         Test the slot parsing of dict response.

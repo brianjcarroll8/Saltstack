@@ -6,6 +6,8 @@
 # Import Python Libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 import salt.modules.neutron as neutron
 
@@ -530,6 +532,7 @@ class NeutronTestCase(TestCase, LoaderModuleMockMixin):
 
     # 'get_quotas_tenant' function tests: 1
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_get_quotas_tenant(self):
         """
         Test if it fetches tenant info in server's context for

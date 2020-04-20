@@ -9,6 +9,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 import types
 from datetime import datetime
 
+import pytest
+
 # Import Salt Libs
 import salt.modules.win_system as win_system
 import salt.utils.platform
@@ -346,6 +348,7 @@ class WinSystemTestCase(TestCase, LoaderModuleMockMixin):
         cmd_run_mock.assert_called_once_with(cmd="hostname")
 
     @skipIf(not win_system.HAS_WIN32NET_MODS, "Missing win32 libraries")
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_get_system_info(self):
         fields = [
             "bios_caption",

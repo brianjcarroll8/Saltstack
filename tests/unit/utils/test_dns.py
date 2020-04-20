@@ -8,6 +8,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 import socket
 import textwrap
 
+import pytest
 import salt.modules.cmdmod
 import salt.utils.dns
 
@@ -351,6 +352,7 @@ class DNSlookupsCase(TestCase):
                     )
 
     @skipIf(not salt.utils.dns.HAS_DIG, "dig is not available")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_dig_options(self):
         cmd = "dig {0} -v".format(salt.utils.dns.DIG_OPTIONS)
         cmd = salt.modules.cmdmod.retcode(

@@ -8,6 +8,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import sys
 
+import pytest
+
 # Import Salt Libs
 import salt.modules.genesis as genesis
 
@@ -25,6 +27,7 @@ class GenesisTestCase(TestCase, LoaderModuleMockMixin):
     def setup_loader_modules(self):
         return {genesis: {}}
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_bootstrap(self):
         """
         Test for Create an image for a specific platform.

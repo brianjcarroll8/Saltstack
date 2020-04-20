@@ -9,6 +9,8 @@
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 from salt.cloud.clouds import dimensiondata
 from salt.exceptions import SaltCloudSystemExit
@@ -112,6 +114,7 @@ class DimensionDataTestCase(ExtendedTestCase, LoaderModuleMockMixin):
         """
         self.assertRaises(SaltCloudSystemExit, dimensiondata.avail_sizes, call="action")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_list_nodes_call(self):
         """
         Tests that a SaltCloudSystemExit is raised when trying to call list_nodes

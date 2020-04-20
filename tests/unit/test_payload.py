@@ -16,6 +16,7 @@ import logging
 import threading
 import time
 
+import pytest
 import salt.exceptions
 import salt.payload
 
@@ -223,6 +224,7 @@ class SREQTestCase(TestCase):
     def get_sreq(self):
         return salt.payload.SREQ("tcp://127.0.0.1:{0}".format(SREQTestCase.port))
 
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_send_auto(self):
         """
         Test creation, send/rect
@@ -234,6 +236,7 @@ class SREQTestCase(TestCase):
         # check that the load always gets passed
         assert sreq.send_auto({"load": "foo"}) == {"load": "foo", "enc": "clear"}
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_send(self):
         sreq = self.get_sreq()
         assert sreq.send("clear", "foo") == {"enc": "clear", "load": "foo"}
@@ -274,6 +277,7 @@ class SREQTestCase(TestCase):
         log.info("Sending regular send")
         assert sreq.send("clear", "foo") == {"enc": "clear", "load": "foo"}
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_destroy(self):
         """
         Test the __del__ capabilities
@@ -283,6 +287,7 @@ class SREQTestCase(TestCase):
         # swallows exceptions, we have to call destroy directly
         sreq.destroy()
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_raw_vs_encoding_none(self):
         """
         Test that we handle the new raw parameter in 5.0.2 correctly based on
@@ -295,6 +300,7 @@ class SREQTestCase(TestCase):
         odata = payload.loads(sdata, encoding=None)
         assert isinstance(odata[dtvalue], six.string_types)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_raw_vs_encoding_utf8(self):
         """
         Test that we handle the new raw parameter in 5.0.2 correctly based on

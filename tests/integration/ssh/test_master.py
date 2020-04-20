@@ -15,6 +15,7 @@ class SSHMasterTestCase(SSHCase):
     Test ssh master functionality
     """
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_can_it_ping(self):
         """
         Ensure the proxy can ping
@@ -24,6 +25,7 @@ class SSHMasterTestCase(SSHCase):
 
     @requires_system_grains
     @pytest.mark.skip_if_not_root
+    @pytest.mark.slow_test(seconds=60)  # Test takes >30 and <=60 seconds
     def test_service(self, grains):
         service = "cron"
         os_family = grains["os_family"]
@@ -47,6 +49,7 @@ class SSHMasterTestCase(SSHCase):
         self.assertTrue(ret)
 
     @requires_system_grains
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_grains_items(self, grains):
         os_family = grains["os_family"]
         ret = self.run_function("grains.items")
@@ -55,11 +58,13 @@ class SSHMasterTestCase(SSHCase):
         else:
             self.assertEqual(ret["kernel"], "Linux")
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_state_apply(self):
         ret = self.run_function("state.apply", ["core"])
         for key, value in ret.items():
             self.assertTrue(value["result"])
 
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_state_highstate(self):
         ret = self.run_function("state.highstate")
         for key, value in ret.items():

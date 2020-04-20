@@ -6,6 +6,8 @@
 # Import Python Libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 import salt.modules.etcd_mod as etcd_mod
 import salt.utils.etcd_util as etcd_util
@@ -110,6 +112,7 @@ class EtcdModTestCase(TestCase, LoaderModuleMockMixin):
 
     # 'ls_' function tests: 1
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_ls(self):
         """
         Test if it return all keys and dirs inside a specific path

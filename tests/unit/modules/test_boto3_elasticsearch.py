@@ -11,6 +11,8 @@ import random
 import string
 import textwrap
 
+import pytest
+
 # Import Salt libs
 import salt.loader
 import salt.modules.boto3_elasticsearch as boto3_elasticsearch
@@ -367,6 +369,7 @@ class Boto3ElasticsearchTestCase(TestCase, LoaderModuleMockMixin):
                 result.get("error", ""), ERROR_MESSAGE.format(101, "update_domain")
             )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_add_tags_positive(self):
         """
         Test that when adding tags is succesful, the .add_tags method returns {'result': True}.
@@ -508,6 +511,7 @@ class Boto3ElasticsearchTestCase(TestCase, LoaderModuleMockMixin):
             )
             self.assertEqual(result, {"result": True})
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_cancel_elasticsearch_service_software_update_error(self):
         """
         Test that when calling cancel_elasticsearch_service_software_update and

@@ -10,6 +10,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import logging
 
+import pytest
 import salt.utils.pbm
 
 # Import Salt libraries
@@ -395,6 +396,7 @@ class GetStoragePoliciesTestCase(TestCase):
         salt.utils.pbm.get_storage_policies(self.mock_prof_mgr)
         mock_retrieve_policy_ids.assert_called_once_with(self.mock_res_type)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_retrieve_policy_ids_raises_no_permissions(self):
         exc = vim.fault.NoPermission()
         exc.privilegeId = "Fake privilege"
@@ -616,6 +618,7 @@ class GetDefaultStoragePolicyOfDatastoreTestCase(TestCase):
             "Not enough permissions. Required privilege: " "Fake privilege",
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_query_default_requirement_profile_raises_vim_fault(self):
         exc = vim.fault.VimFault()
         exc.msg = "VimFault msg"

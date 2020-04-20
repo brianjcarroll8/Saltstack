@@ -9,6 +9,8 @@
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
+
 # Import Salt Libs
 from salt.cloud.clouds import openstack
 
@@ -124,6 +126,7 @@ class OpenstackTestCase(TestCase, LoaderModuleMockMixin):
             ret = openstack.list_nodes_full(conn=conn)
             self.assertEqual(ret[conn.node.name]["image"], node_image)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_list_nodes_full_image_obj(self):
         conn = MockConn(MockImage())
         with patch("salt.cloud.clouds.openstack._get_ips", return_value=[]):

@@ -8,6 +8,7 @@ import logging
 import os
 import textwrap
 
+import pytest
 import salt.loader
 import salt.utils.data
 import salt.utils.files
@@ -476,6 +477,7 @@ class TestReactWrap(TestCase, AdaptedConfigurationTestCaseMixin):
     def tearDownClass(cls):
         del cls.wrap
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_runner(self):
         """
         Test runner reactions using both the old and new config schema

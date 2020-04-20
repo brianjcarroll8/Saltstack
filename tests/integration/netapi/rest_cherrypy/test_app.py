@@ -12,6 +12,7 @@ from salt.ext.six.moves.urllib.parse import urlencode
 
 
 class TestAuth(cptc.BaseRestCherryPyTest):
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_get_root_noauth(self):
         """
         GET requests to the root URL should not require auth
@@ -19,6 +20,7 @@ class TestAuth(cptc.BaseRestCherryPyTest):
         request, response = self.request("/")
         self.assertEqual(response.status, "200 OK")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_post_root_auth(self):
         """
         POST requests to the root URL redirect to login
@@ -26,6 +28,7 @@ class TestAuth(cptc.BaseRestCherryPyTest):
         request, response = self.request("/", method="POST", data={})
         self.assertEqual(response.status, "401 Unauthorized")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_login_noauth(self):
         """
         GET requests to the login URL should not require auth
@@ -33,6 +36,7 @@ class TestAuth(cptc.BaseRestCherryPyTest):
         request, response = self.request("/login")
         self.assertEqual(response.status, "200 OK")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_webhook_auth(self):
         """
         Requests to the webhook URL require auth by default
@@ -44,6 +48,7 @@ class TestAuth(cptc.BaseRestCherryPyTest):
 class TestLogin(cptc.BaseRestCherryPyTest):
     auth_creds = (("username", "saltdev"), ("password", "saltdev"), ("eauth", "auto"))
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_good_login(self):
         """
         Test logging in
@@ -58,6 +63,7 @@ class TestLogin(cptc.BaseRestCherryPyTest):
         self.assertEqual(response.status, "200 OK")
         return response
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_bad_login(self):
         """
         Test logging in
@@ -71,6 +77,7 @@ class TestLogin(cptc.BaseRestCherryPyTest):
         )
         self.assertEqual(response.status, "401 Unauthorized")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_logout(self):
         ret = self.test_good_login()
         token = ret.headers["X-Auth-Token"]
@@ -101,6 +108,7 @@ class TestRun(cptc.BaseRestCherryPyTest):
         ("fun", "test.ping"),
     )
 
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_run_good_login(self):
         """
         Test the run URL with good auth credentials
@@ -116,6 +124,7 @@ class TestRun(cptc.BaseRestCherryPyTest):
         )
         self.assertEqual(response.status, "200 OK")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_run_bad_login(self):
         """
         Test the run URL with bad auth credentials
@@ -131,6 +140,7 @@ class TestRun(cptc.BaseRestCherryPyTest):
         )
         self.assertEqual(response.status, "401 Unauthorized")
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_run_empty_token(self):
         """
         Test the run URL with empty token
@@ -146,6 +156,7 @@ class TestRun(cptc.BaseRestCherryPyTest):
         )
         assert response.status == "401 Unauthorized"
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_run_empty_token_upercase(self):
         """
         Test the run URL with empty token with upercase characters
@@ -161,6 +172,7 @@ class TestRun(cptc.BaseRestCherryPyTest):
         )
         assert response.status == "401 Unauthorized"
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_run_wrong_token(self):
         """
         Test the run URL with incorrect token
@@ -176,6 +188,7 @@ class TestRun(cptc.BaseRestCherryPyTest):
         )
         assert response.status == "401 Unauthorized"
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_run_pathname_token(self):
         """
         Test the run URL with path that exists in token
@@ -191,6 +204,7 @@ class TestRun(cptc.BaseRestCherryPyTest):
         )
         assert response.status == "401 Unauthorized"
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_run_pathname_not_exists_token(self):
         """
         Test the run URL with path that does not exist in token
@@ -206,6 +220,7 @@ class TestRun(cptc.BaseRestCherryPyTest):
         )
         assert response.status == "401 Unauthorized"
 
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_run_extra_parameters(self):
         """
         Test the run URL with good auth credentials
@@ -233,6 +248,7 @@ class TestWebhookDisableAuth(cptc.BaseRestCherryPyTest):
             },
         }
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_webhook_noauth(self):
         """
         Auth can be disabled for requests to the webhook URL
@@ -271,6 +287,7 @@ class TestArgKwarg(cptc.BaseRestCherryPyTest):
         )
         return response.headers["X-Auth-Token"]
 
+    @pytest.mark.slow_test(seconds=10)  # Test takes >5 and <=10 seconds
     def test_accepts_arg_kwarg_keys(self):
         """
         Ensure that (singular) arg and kwarg keys (for passing parameters)
@@ -336,6 +353,7 @@ class TestJobs(cptc.BaseRestCherryPyTest):
         self.assertEqual(response.status, "200 OK")
 
     @pytest.mark.flaky(max_runs=4)
+    @pytest.mark.slow_test(seconds=30)  # Test takes >10 and <=30 seconds
     def test_all_jobs(self):
         """
         test query to /jobs returns job data

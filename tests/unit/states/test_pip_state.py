@@ -15,6 +15,7 @@ import os
 import subprocess
 import sys
 
+import pytest
 import salt.states.pip_state as pip_state
 import salt.utils.path
 
@@ -52,6 +53,7 @@ class PipStateTest(TestCase, SaltReturnAssertsMixin, LoaderModuleMockMixin):
             }
         }
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_install_requirements_parsing(self):
         log.debug("Real pip version is %s", pip.__version__)
         mock = MagicMock(return_value={"retcode": 0, "stdout": ""})
@@ -420,6 +422,7 @@ class PipStateUtilsTest(TestCase):
     salt.utils.path.which_bin(KNOWN_BINARY_NAMES) is None, "virtualenv not installed"
 )
 class PipStateInstallationErrorTest(TestCase):
+    @pytest.mark.slow_test(seconds=120)  # Test takes >60 and <=120 seconds
     def test_importable_installation_error(self):
         extra_requirements = []
         for name, version in salt.version.dependency_information():

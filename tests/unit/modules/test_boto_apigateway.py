@@ -8,6 +8,8 @@ import logging
 import random
 import string
 
+import pytest
+
 # Import Salt libs
 import salt.loader
 import salt.modules.boto_apigateway as boto_apigateway
@@ -640,6 +642,7 @@ class BotoApiGatewayTestCase(BotoApiGatewayTestCaseBase, BotoApiGatewayTestCaseM
         self.assertTrue(api_keys)
         self.assertIs(diff, False)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_describing_api_keys_fails_the_desribe_api_keys_method_returns_error(
         self,
     ):
@@ -1020,6 +1023,7 @@ class BotoApiGatewayTestCase(BotoApiGatewayTestCaseBase, BotoApiGatewayTestCaseM
         )
         self.assertTrue(result.get("set"))
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_activating_api_deployment_for_stage_that_does_not_exist_the_activate_api_deployment_method_returns_false(
         self,
     ):
@@ -1187,6 +1191,7 @@ class BotoApiGatewayTestCase(BotoApiGatewayTestCaseBase, BotoApiGatewayTestCaseM
         )
         self.assertTrue(result.get("stage"))
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_describing_api_stage_that_does_not_exist_the_describe_api_stage_method_returns_error(
         self,
     ):
@@ -1855,6 +1860,7 @@ class BotoApiGatewayTestCase(BotoApiGatewayTestCaseBase, BotoApiGatewayTestCaseM
         )
         self.assertFalse(result.get("created"))
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_creating_an_api_method_and_error_thrown_on_put_method_the_create_api_method_method_returns_false(
         self,
     ):
@@ -1926,6 +1932,7 @@ class BotoApiGatewayTestCase(BotoApiGatewayTestCaseBase, BotoApiGatewayTestCaseM
         )
         self.assertFalse(result.get("deleted"))
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_describing_an_api_method_response_that_exists_the_describe_api_method_respond_method_returns_the_response(
         self,
     ):

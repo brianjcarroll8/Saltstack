@@ -8,6 +8,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import logging
 
+import pytest
+
 # Import Salt Libs
 import salt.config
 import salt.loader
@@ -206,6 +208,7 @@ class DockerTestCase(TestCase, LoaderModuleMockMixin):
                 all=True, filters={"label": "KEY"}
             )
 
+    @pytest.mark.slow_test(seconds=10)  # Test takes >5 and <=10 seconds
     def test_check_mine_cache_is_refreshed_on_container_change_event(self):
         """
         Every command that might modify docker containers state.
@@ -896,6 +899,7 @@ class DockerTestCase(TestCase, LoaderModuleMockMixin):
             ret,
         )
 
+    @pytest.mark.slow_test(seconds=10)  # Test takes >5 and <=10 seconds
     def test_call_success(self):
         """
         test module calling inside containers

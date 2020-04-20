@@ -7,6 +7,8 @@ import logging
 import random
 import string
 
+import pytest
+
 # Import Salt libs
 import salt.config
 import salt.loader
@@ -531,6 +533,7 @@ class BotoIoTPolicyTestCase(BotoIoTTestCaseBase, BotoIoTTestCaseMixin):
             error_message.format("get_policy_version"),
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_creating_a_policy_version_succeeds_the_create_policy_version_method_returns_true(
         self,
     ):
@@ -704,6 +707,7 @@ class BotoIoTPolicyTestCase(BotoIoTTestCaseBase, BotoIoTTestCaseMixin):
             error_message.format("list_policy_versions"),
         )
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_setting_default_policy_version_succeeds_the_set_default_policy_version_method_returns_true(
         self,
     ):
@@ -810,6 +814,7 @@ class BotoIoTPolicyTestCase(BotoIoTTestCaseBase, BotoIoTTestCaseMixin):
 
         self.assertTrue(result["detached"])
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_that_when_detach_principal_policy_version_fails_the_detach_principal_policy_version_method_returns_error(
         self,
     ):

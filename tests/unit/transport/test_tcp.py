@@ -156,6 +156,7 @@ class AESReqTestCases(BaseTCPReqCase, ReqChannelMixin):
     # TODO: make failed returns have a specific framing so we can raise the same exception
     # on encrypted channels
     @pytest.mark.flaky(max_runs=4)
+    @pytest.mark.slow_test(seconds=10)  # Test takes >5 and <=10 seconds
     def test_badload(self):
         """
         Test a variety of bad requests, make sure that we get some sort of error
@@ -259,6 +260,7 @@ class BaseTCPPubCase(AsyncTestCase, AdaptedConfigurationTestCaseMixin):
 
 
 class AsyncTCPPubChannelTest(AsyncTestCase, AdaptedConfigurationTestCaseMixin):
+    @pytest.mark.slow_test(seconds=5)  # Test takes >1 and <=5 seconds
     def test_connect_publish_port(self):
         """
         test when publish_port is not 4506
@@ -348,6 +350,7 @@ class SaltMessageClientPoolTest(AsyncTestCase):
 
         self.assertIsNone(test_connect(self))
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_connect_partial(self):
         @gen_test(timeout=0.1)
         def test_connect(self):
@@ -378,6 +381,7 @@ class SaltMessageClientCleanupTest(TestCase, AdaptedConfigurationTestCaseMixin):
         self.sock.close()
         del self.sock
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_message_client(self):
         """
         test message client cleanup on close
@@ -422,6 +426,7 @@ class TCPPubServerChannelTest(TestCase, AdaptedConfigurationTestCaseMixin):
     @patch("salt.master.SMaster.secrets")
     @patch("salt.crypt.Crypticle")
     @patch("salt.utils.asynchronous.SyncWrapper")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_publish_filtering(self, sync_wrapper, crypticle, secrets):
         opts = self.get_temp_config("master")
         opts["sign_pub_messages"] = False
@@ -462,6 +467,7 @@ class TCPPubServerChannelTest(TestCase, AdaptedConfigurationTestCaseMixin):
     @patch("salt.master.SMaster.secrets")
     @patch("salt.crypt.Crypticle")
     @patch("salt.utils.asynchronous.SyncWrapper")
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_publish_filtering_str_list(
         self, sync_wrapper, crypticle, secrets, check_minions
     ):

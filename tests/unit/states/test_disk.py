@@ -7,6 +7,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from os import path
 
+import pytest
+
 # Import Salt Libs
 import salt.states.disk as disk
 
@@ -103,6 +105,7 @@ class DiskTestCase(TestCase, LoaderModuleMockMixin):
         ret = disk.status(mock_fs, minimum=r"\cos\pi + i\sin\pi")
         self.assertEqual(ret, mock_ret)
 
+    @pytest.mark.slow_test(seconds=1)  # Test takes >0.1 and <=1 seconds
     def test_status_range_error(self):
         """
         Test disk.status with excessive extrema
