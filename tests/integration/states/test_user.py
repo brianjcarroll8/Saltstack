@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 tests for user state
 user absent
@@ -16,11 +15,7 @@ from random import randint
 import pytest
 import salt.utils.platform
 from tests.support.case import ModuleCase
-from tests.support.helpers import (
-    destructiveTest,
-    requires_system_grains,
-    skip_if_not_root,
-)
+from tests.support.helpers import destructiveTest, requires_system_grains
 from tests.support.mixins import SaltReturnAssertsMixin
 from tests.support.unit import skipIf
 
@@ -47,7 +42,7 @@ else:
 
 
 @destructiveTest
-@skip_if_not_root
+@pytest.mark.skip_if_not_root
 @pytest.mark.windows_whitelisted
 class UserTest(ModuleCase, SaltReturnAssertsMixin):
     """
@@ -310,7 +305,7 @@ class UserTest(ModuleCase, SaltReturnAssertsMixin):
 
 
 @destructiveTest
-@skip_if_not_root
+@pytest.mark.skip_if_not_root
 @skipIf(not salt.utils.platform.is_windows(), "Windows only tests")
 @pytest.mark.windows_whitelisted
 class WinUserTest(ModuleCase, SaltReturnAssertsMixin):

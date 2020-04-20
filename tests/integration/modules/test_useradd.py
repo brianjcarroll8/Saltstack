@@ -9,17 +9,13 @@ import pytest
 import salt.utils.platform
 from salt.ext.six.moves import range
 from tests.support.case import ModuleCase
-from tests.support.helpers import (
-    destructiveTest,
-    requires_system_grains,
-    skip_if_not_root,
-)
+from tests.support.helpers import destructiveTest, requires_system_grains
 from tests.support.unit import skipIf
 
 
 @destructiveTest
 @skipIf(not salt.utils.platform.is_linux(), "These tests can only be run on linux")
-@skip_if_not_root
+@pytest.mark.skip_if_not_root
 @pytest.mark.windows_whitelisted
 class UseraddModuleTestLinux(ModuleCase):
     def setUp(self):
@@ -100,7 +96,7 @@ class UseraddModuleTestLinux(ModuleCase):
 
 @destructiveTest
 @skipIf(not salt.utils.platform.is_windows(), "These tests can only be run on Windows")
-@skip_if_not_root
+@pytest.mark.skip_if_not_root
 @pytest.mark.windows_whitelisted
 class UseraddModuleTestWindows(ModuleCase):
     def __random_string(self, size=6):

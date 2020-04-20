@@ -13,7 +13,7 @@ import string
 import pytest
 from salt.ext.six.moves import range
 from tests.support.case import ModuleCase
-from tests.support.helpers import destructiveTest, skip_if_not_root
+from tests.support.helpers import destructiveTest
 
 
 @pytest.mark.skip_unless_on_freebsd
@@ -30,7 +30,7 @@ class PwUserModuleTest(ModuleCase):
         )
 
     @destructiveTest
-    @skip_if_not_root
+    @pytest.mark.skip_if_not_root
     def test_groups_includes_primary(self):
         # Let's create a user, which usually creates the group matching the
         # name
