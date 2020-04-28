@@ -100,3 +100,60 @@ jobs:
       with:
         name: docs-man
         path: doc/man-archive.tar.xz
+
+
+  debian-10:
+    name: Debian 10
+    runs-on: ubuntu-latest
+    #needs: pre-commit
+
+    timeout-minutes: 1800
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6
+
+    - name: Set Env Keys
+      run: |
+        echo "::set-env name=RUBY::$(ruby --version | sha256sum | cut -d' ' -f1)"
+        echo "::set-env name=BUNDLE_WITH::docker"
+        echo "::set-env name=BUNDLE_WITHOUT::ec2 vagrant windows"
+
+    - name: Set Cache Key
+      run: |
+        echo "RUBY=${{ env.RUBY }}"
+        echo "BUNDLE_WITH=${{ env.BUNDLE_WITH }}"
+        echo "BUNDLE_WITHOUT=${{ env.BUNDLE_WITHOUT }}"
+        echo "::set-env name=BUNDLE_CACHE_KEY::$(echo ${{ env.RUBY }} ${{ env.BUNDLE_WITH }} ${{ env.BUNDLE_WITHOUT }} | sha256sum | cut -d' ' -f1)"
+
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: bundle-use-ruby-${{ runner.os }}-${{ env.BUNDLE_CACHE_KEY }}-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          bundle-use-ruby-${{ runner.os }}-${{ env.BUNDLE_CACHE_KEY }}-
+
+    - name: bundle install
+      run: |
+        bundle config path vendor/bundle
+        bundle config set with ${{ env.BUNDLE_WITH }}
+        bundle config set without ${{ env.BUNDLE_WITHOUT }}
+        bundle install --jobs 4 --retry 3
+
+    - name: Run Tests
+      env:
+        NOX_PASSTHROUGH_OPTS: '--ssh-tests'
+        SALT_DOCKER_IMAGE: 'saltstack/ci-debian-10'
+      run: |
+        ssh-keygen -t rsa -b 4096 -C "Test Kitchen Key" -f ~/.ssh/id_rsa -q -N ""
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/id_rsa
+        bundle exec kitchen verify --debug py3-debian-10
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: artifacts
+        path: artifacts/
