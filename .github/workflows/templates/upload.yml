@@ -1,0 +1,11 @@
+
+    - name: Upload Test Results
+      if: always()
+      shell: bash
+      run: |
+        curl https://report.ci/report.py > report.py
+          python report.py \
+          --include-as-junit 'artifacts/xml-unittests-output/*.xml' \
+          --log-as-python 'artifacts/logs/*.log'
+          --merge ".*" \
+          --name="{display_name}" || echo "Failed to upload test results"

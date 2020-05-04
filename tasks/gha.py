@@ -76,6 +76,10 @@ LINUX_CONFIGS = {
 @task
 def generate(ctx, output="ci", skip_windows=False, skip_macos=False):
     output_file = str(GHA_WORKFLOWS_DIR / "{}.yml".format(output))
+
+    with open(str(GHA_TEMPLATES_DIR / "upload.yml")) as rfh:
+        upload_step = rfh.read()
+
     jobs = ""
     for template in ("pre-commit.yml", "lint.yml", "docs.yml"):
         with open(str(GHA_TEMPLATES_DIR / template)) as rfh:
@@ -109,14 +113,17 @@ def generate(ctx, output="ci", skip_windows=False, skip_macos=False):
                         nox_env_name=nox_env_name,
                         nox_passthrough_opts=nox_passthrough_opts,
                     )
+                jobs += upload_step.format(display_name=job_display_name)
 
     if skip_macos is False:
         with open(str(GHA_TEMPLATES_DIR / "macos.yml")) as rfh:
             jobs += rfh.read()
+            jobs += upload_step.format(display_name="macOS Catalina 10.15")
 
     if skip_windows is False:
         with open(str(GHA_TEMPLATES_DIR / "windows.yml")) as rfh:
             jobs += rfh.read()
+            jobs += upload_step.format(display_name="Windows Server 2019")
 
     with open(output_file, "w") as wfh:
         with open(str(GHA_TEMPLATES_DIR / "header.yml")) as rfh:
