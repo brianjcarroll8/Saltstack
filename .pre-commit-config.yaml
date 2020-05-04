@@ -790,3 +790,17 @@ repos:
           - invoke-pre-commit
           - --
           - filemap.check
+
+  - repo: https://github.com/saltstack/salt-nox-pre-commit
+    rev: master
+    hooks:
+      - id: nox-py2
+        alias: generate-github-actions
+        name: Generate Github Actions
+        files: ^(tasks/gha\.py|.github/workflows/templates/.*\.yml)$
+        pass_filenames: false
+        args:
+          - -e
+          - invoke-pre-commit
+          - --
+          - gha.generate
