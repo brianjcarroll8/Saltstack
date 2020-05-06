@@ -2,10 +2,28 @@
     - name: Upload Test Results
       if: always()
       shell: bash
+      env:
+        REPORT_CI_TOKEN: ${{{{ secrets.REPORT_CI_TOKEN }}}}
       run: |
-        curl https://report.ci/report.py > report.py
-          python report.py \
-          --include-as-junit 'artifacts/xml-unittests-output/*.xml' \
-          --log-as-python 'artifacts/logs/*.log'
-          --merge ".*" \
-          --name="{display_name}" || echo "Failed to upload test results"
+        if [ ! -f report.py ]; then
+          curl https://report.ci/report.py > report.py
+        fi
+        python report.py \
+        --token ${{REPORT_CI_TOKEN}} \
+        --include 'artifacts/xml-unittests-output/*.xml' \
+        --merge ".*" \
+        --name="{display_name}" || echo "Failed to upload test results"
+
+    - name: Upload Logs
+      if: always()
+      shell: bash
+      env:
+        REPORT_CI_TOKEN: ${{{{ secrets.REPORT_CI_TOKEN }}}}
+      run: |
+        if [ ! -f report.py ]; then
+          curl https://report.ci/report.py > report.py
+        fi
+        python report.py \
+        --token ${{REPORT_CI_TOKEN}} \
+        --log-as-python 'artifacts/logs/*.log' \
+        --name="{display_name}" || echo "Failed to upload logs"
