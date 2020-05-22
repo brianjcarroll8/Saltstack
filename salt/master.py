@@ -24,7 +24,6 @@ import time
 import salt.acl
 import salt.auth
 import salt.client
-import salt.client.ssh.client
 
 # Import salt libs
 import salt.crypt
@@ -2423,6 +2422,9 @@ class ClearFuncs(TransportMethods):
     @property
     def ssh_client(self):
         if not hasattr(self, "_ssh_client"):
+            # Late import
+            import salt.client.ssh.client
+
             self._ssh_client = salt.client.ssh.client.SSHClient(mopts=self.opts)
         return self._ssh_client
 
