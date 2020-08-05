@@ -1316,8 +1316,12 @@ def reap_stray_processes():
 
 
 @pytest.fixture(scope="session")
-def grains(request):
-    sminion = create_sminion()
+def sminion():
+    return create_sminion()
+
+
+@pytest.fixture(scope="session")
+def grains(sminion):
     return sminion.opts["grains"].copy()
 
 
