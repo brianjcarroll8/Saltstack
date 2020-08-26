@@ -251,6 +251,15 @@ def salt_loader_module_functions(module):
     return funcs
 
 
+@pytest.helpers.register
+def remove_stale_minion_key(master, minion_id):
+    key_path = os.path.join(master.config["pki_dir"], "minions", minion_id)
+    if os.path.exists(key_path):
+        os.unlink(key_path)
+    else:
+        log.debug("The minion(id=%r) key was not found at %s", minion_id, key_path)
+
+
 # Only allow star importing the functions defined in this module
 __all__ = [
     name
