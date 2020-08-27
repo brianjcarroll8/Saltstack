@@ -51,7 +51,7 @@ def pytest_collection_modifyitems(config, items):
             )
 
 
-@pytest.fixture(scope="package")
+@pytest.fixture(scope="session")
 def salt_master_factory(
     request,
     salt_factories,
@@ -166,7 +166,7 @@ def salt_master_factory(
     return factory
 
 
-@pytest.fixture(scope="package")
+@pytest.fixture(scope="session")
 def salt_minion_factory(salt_master_factory):
     with salt.utils.files.fopen(os.path.join(RUNTIME_VARS.CONF_DIR, "minion")) as rfh:
         config_defaults = yaml.deserialize(rfh.read())
@@ -194,7 +194,7 @@ def salt_minion_factory(salt_master_factory):
     return factory
 
 
-@pytest.fixture(scope="package")
+@pytest.fixture(scope="session")
 def salt_sub_minion_factory(salt_master_factory):
     with salt.utils.files.fopen(
         os.path.join(RUNTIME_VARS.CONF_DIR, "sub_minion")
@@ -224,7 +224,7 @@ def salt_sub_minion_factory(salt_master_factory):
     return factory
 
 
-@pytest.fixture(scope="package")
+@pytest.fixture(scope="session")
 def salt_proxy_factory(salt_factories, salt_master_factory):
     proxy_minion_id = random_string("proxytest-")
     root_dir = salt_factories.get_root_dir_for_daemon(proxy_minion_id)
@@ -252,7 +252,7 @@ def salt_proxy_factory(salt_factories, salt_master_factory):
     return factory
 
 
-@pytest.fixture(scope="package")
+@pytest.fixture(scope="session")
 def bridge_pytest_and_runtests():
     """
     We're basically overriding the same fixture defined in tests/conftest.py
