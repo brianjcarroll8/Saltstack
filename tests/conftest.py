@@ -320,10 +320,10 @@ def pytest_collection_modifyitems(config, items):
     :param _pytest.config.Config config: pytest config object
     :param List[_pytest.nodes.Item] items: list of item objects
     """
+    from_filenames_collection_modifyitems(config, items)
     # Let PyTest or other plugins handle the initial collection
     yield
     groups_collection_modifyitems(config, items)
-    from_filenames_collection_modifyitems(config, items)
 
     log.warning("Mofifying collected tests to keep track of fixture usage")
     for item in items:
