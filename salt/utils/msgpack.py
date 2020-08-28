@@ -69,8 +69,8 @@ def _sanitize_msgpack_kwargs(kwargs):
         log.info("removing unsupported `raw` argument from msgpack call")
     if version < (0, 4, 0) and kwargs.pop("use_bin_type", None) is not None:
         log.info("removing unsupported `use_bin_type` argument from msgpack call")
-    # if version >= (1, 0, 0) and kwargs.pop("encoding", None) is not None:
-    #    log.debug("removing unsupported `encoding` argument from msgpack call")
+    if version >= (1, 0, 0) and kwargs.pop("encoding", None) is not None:
+        log.debug("removing unsupported `encoding` argument from msgpack call")
 
     return kwargs
 
@@ -82,12 +82,9 @@ def _sanitize_msgpack_unpack_kwargs(kwargs):
     https://github.com/msgpack/msgpack-python/blob/master/ChangeLog.rst
     """
     assert isinstance(kwargs, dict)
-    if version >= (0, 6, 0) and version < (1, 0, 0):
-        kwargs.setdefault("max_buffer_size", 100 * 1024 * 1024)
     if version >= (1, 0, 0):
         kwargs.setdefault("raw", True)
         kwargs.setdefault("strict_map_key", False)
-        kwargs.pop("encoding", None)
     return _sanitize_msgpack_kwargs(kwargs)
 
 

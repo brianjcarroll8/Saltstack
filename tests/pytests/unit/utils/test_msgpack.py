@@ -3,7 +3,6 @@ import salt.utils.msgpack
 from tests.support.mock import MagicMock, patch
 
 
-@pytest.mark.skipif(True, reason="because")
 def test_load_encoding(tmpdir):
     """
     test when using msgpack version >= 1.0.0 we
@@ -25,7 +24,6 @@ def test_load_encoding(tmpdir):
         assert ret == data
 
 
-@pytest.mark.skipif(True, reason="because")
 @pytest.mark.parametrize(
     "version,encoding", [((2, 1, 3), False), ((1, 0, 0), False), ((0, 6, 2), True)]
 )
