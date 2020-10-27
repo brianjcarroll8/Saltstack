@@ -110,7 +110,7 @@ cherrypy==17.3.0
 click==7.1.1              # via geomet
 contextlib2==0.5.5        # via cherrypy
 croniter==0.3.29
-cryptography==2.6.1       # via adal, azure-cosmosdb-table, azure-keyvault, azure-storage-common, moto, paramiko, pyopenssl, vcert
+cryptography==3.2       # via adal, azure-cosmosdb-table, azure-keyvault, azure-storage-common, moto, paramiko, pyopenssl, vcert
 distlib==0.3.0            # via virtualenv
 distro==1.5.0
 dnspython==1.16.0
