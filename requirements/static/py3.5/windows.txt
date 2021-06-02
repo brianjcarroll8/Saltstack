@@ -110,7 +110,7 @@ strict-rfc3339==0.7
 tempora==1.14.1           # via portend
 timelib==0.2.4
 toml==0.10.0
-urllib3==1.24.2           # via botocore, kubernetes, python-etcd, requests
+urllib3==1.26.5           # via botocore, kubernetes, python-etcd, requests
 virtualenv==20.0.20
 wcwidth==0.1.7            # via pytest
 websocket-client==0.40.0  # via docker, kubernetes
